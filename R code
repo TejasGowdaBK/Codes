@@ -1,0 +1,441 @@
+setwd("C:\\Tejas\\R\\Logistic Regression")
+
+data = read.csv("final.tejas.csv",header = T)
+
+head(data)
+
+#Setting NA values for variables like no of services / amt/visits to zero
+t1<-c("NO_MINOR_REPAIR",
+      "NO_FREE_SERVICES",
+      "NO_PAID_SERVICES",
+      "NO_PW_SERVICES",
+      "NO_OTHER_SERVICES",
+      "TOTAL_LABOUR_AMT",
+      "TOTAL_SPARES_AMT",
+      "TOTAL_NO_OF_COMPLAINTS",
+      "LAST_SERVICE_TIME_SPENT",
+      "tot_act_visits_nonrepairs",
+      "total_spend_last_1yr",
+      "actual_visits_last_1yr",
+      "total_spend_last_2yr",
+      "actual_visits_fy_last_2yr")
+
+data[t1][is.na(data[t1])]<-0
+rm(t1)
+
+https://kelseydaniellekitchen.files.wordpress.com/2014/07/m405-consumer-behavior-final-project.pdf
+#steps to treat outliers
+boxplot(data$TOTAL_LABOUR_AMT)
+
+
+m<-mean(data$TOTAL_LABOUR_AMT, na.rm = TRUE)
+sd<-sd(data$TOTAL_LABOUR_AMT, na.rm = TRUE)
+ul<-m+(2*sd)
+ll<-m-(2*sd)
+data$TOTAL_LABOUR_AMT<-as.numeric(ifelse(data$TOTAL_LABOUR_AMT<=ll,ll,ifelse(data$TOTAL_LABOUR_AMT>=ul,ul,data$TOTAL_LABOUR_AMT)))
+
+boxplot(data$TOTAL_LABOUR_AMT)
+
+summary(data)
+
+# Converting categorical into factore like Months
+data$LAST_JOB_TYPE_ID<-factor(data$LAST_JOB_TYPE_ID)
+
+data$vehicle_tag<-factor(data$vehicle_tag)
+
+data$MONTH_OF_PURCHASE<-factor(data$MONTH_OF_PURCHASE)
+
+# CONVERTING REMAINING CATEGORICAL VARIABLES INTO BINARY VARAIABLES
+colnames(data)
+set.seed(1234567)
+gc()
+
+#converting  into dummy variables
+final.sample1<-data.frame(model.matrix(~.-CEQ_ID-IS_REPURCHASER,data))
+final.sample1$CEQ_ID<-data$CEQ_ID
+final.sample1$IS_REPURCHASER<-data$IS_REPURCHASER
+#rm(data)
+summary(final.sample1$SERIESFLAME)
+hist(final.sample1$SERIESFLAME)
+
+LAST_JOB_TYPE_ID14
+SERIESFLAME
+SERIESSCOOTY.ELECTRIC 
+
+
+
+
+##Checking Multicolinearity
+library(usdm)
+library(sqldf)
+
+temp <- vif(final.sample1[,-c(86,87)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(42)]
+
+temp <- vif(final.sample1[,-c(85,86)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(7)]
+
+gc()
+temp <- vif(final.sample1[,-c(84,85)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(4)]
+
+gc()
+temp <- vif(final.sample1[,-c(80,81)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(2)]
+
+gc()
+temp <- vif(final.sample1[,-c(79,80)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(53)]
+
+gc()
+temp <- vif(final.sample1[,-c(78,79)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(3)]
+
+gc()
+temp <- vif(final.sample1[,-c(77,78)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(46)]
+
+gc()
+temp <- vif(final.sample1[,-c(76,77)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(48)]
+
+gc()
+temp <- vif(final.sample1[,-c(75,76)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(41)]
+
+gc()
+temp <- vif(final.sample1[,-c(74,75)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(17)]
+
+gc()
+temp <- vif(final.sample1[,-c(73,74)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(35)]
+
+gc()
+temp <- vif(final.sample1[,-c(72,73)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+
+final.sample1<-final.sample1[-c(45)]
+
+gc()
+temp <- vif(final.sample1[,-c(71,72)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(3)]
+
+gc()
+temp <- vif(final.sample1[,-c(70,71)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(57)]
+
+gc()
+temp <- vif(final.sample1[,-c(69,70)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(43)]
+
+gc()
+temp <- vif(final.sample1[,-c(68,69)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(37,1)]
+
+gc()
+temp <- vif(final.sample1[,-c(66,67)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(34)]
+
+gc()
+temp <- vif(final.sample1[,-c(65,66)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(35)]
+
+gc()
+temp <- vif(final.sample1[,-c(64,65)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(51)]
+
+gc()
+temp <- vif(final.sample1[,-c(63,64)])
+sqldf("select * from temp order by VIF")
+colnames(final.sample1)
+final.sample1<-final.sample1[-c(38)]
+
+temp <- vif(final.sample1[,-c(62,63)])
+sqldf("select * from temp order by VIF")
+
+rm(temp)
+
+#same function present in 2 packages
+detach("package:usdm", unload=TRUE)
+detach("package:sqldf", unload=TRUE)
+
+
+
+# Make Stratified Sampling Training and Validation
+
+prop.table(with(final.sample1, table(IS_REPURCHASER)))
+#0         1 
+#0.7541571 0.2458429 
+
+set.seed(10001)
+library(caret)
+inTrain <- createDataPartition(final.sample1$IS_REPURCHASER, p = .60, list = FALSE)
+head(inTrain)
+str(inTrain)
+
+
+dfTraining<-final.sample1[inTrain,]
+nrow(dfTraining)
+# 42686
+prop.table(with(dfTraining, table(IS_REPURCHASER)))
+#        0         1 
+#0.7529969 0.2470031 
+
+
+dfValidation<-final.sample1[-inTrain,]
+nrow(dfValidation)
+# 28457
+prop.table(with(dfValidation, table(IS_REPURCHASER)))
+#0         1 
+#0.7568644 0.2431356 
+detach("package:caret", unload=TRUE)
+
+#fitting linear regression to check vif
+#library(car)
+#formula <- as.formula(IS_REPURCHASER~.-CEQ_ID)
+#fit.lm <-lm(formula,data=dfTraining)
+#vif_final<-vif(fit.lm)
+
+#write.csv(vif_final,"vif_all.csv")
+
+detach("package:car",unload=TRUE)
+
+
+# Fitting GLM
+colnames(dfTraining)
+
+fit1<-glm(IS_REPURCHASER ~ . - CEQ_ID   ,
+          data=dfTraining,family=binomial(link=logit))
+summary(fit1)
+
+fit1<-glm(IS_REPURCHASER ~ . - CEQ_ID  
+          -SERIESJIVE	-MONTH_OF_PURCHASE5	-MONTH_OF_PURCHASE7
+          -avg_km_usage_per_day	-LAST_JOB_TYPE_ID19	-LAST_JOB_TYPE_ID20
+          -LAST_JOB_TYPE_ID25	-LATEST_CUST_SEGMENTELITE	-SERIESMAX.4R
+          -SERIESPHOENIX	-SERIESSTREAK	-MONTH_OF_PURCHASE8	
+          -LATEST_CUST_SEGMENTPOTENTIAL	-LAST_JOB_TYPE_ID5
+          -LAST_JOB_TYPE_ID16	-LAST_SERVICE_TIME_SPENT	
+          -SERIESSCOOTY.2S	-SERIESZEST	-MONTH_OF_PURCHASE2	
+          -MONTH_OF_PURCHASE3	-MONTH_OF_PURCHASE4	-MONTH_OF_PURCHASE6
+, data=dfTraining,family=binomial(link=logit))
+summary(fit1)
+
+gc()
+some <- step(fit1, direction='both', criterion='AIC',trace=0)
+formula(some)
+#rm(some)
+#rm(fit1)
+
+fit2<-glm(IS_REPURCHASER ~ (year_of_birth + avg_km_usage_per_day + SALES_TO_1ST_SERVICE_DAYS + 
+                              SERVICE_LATENCY + LAST_JOB_TYPE_ID2 + LAST_JOB_TYPE_ID3 + 
+                              LAST_JOB_TYPE_ID4 + LAST_JOB_TYPE_ID5 + LAST_JOB_TYPE_ID6 + 
+                              LAST_JOB_TYPE_ID7 + LAST_JOB_TYPE_ID8 + LAST_JOB_TYPE_ID9 + 
+                              LAST_JOB_TYPE_ID10 + LAST_JOB_TYPE_ID11 + LAST_JOB_TYPE_ID13 + 
+                              LAST_JOB_TYPE_ID15 + LAST_JOB_TYPE_ID16 + LAST_JOB_TYPE_ID17 + 
+                              LAST_JOB_TYPE_ID18 + LAST_JOB_TYPE_ID19 + LAST_JOB_TYPE_ID20 + 
+                              LAST_JOB_TYPE_ID25 + LAST_JOB_TYPE_ID26 + LAST_JOB_TYPE_ID27 + 
+                              LAST_JOB_TYPE_ID31 + LATEST_CUST_SEGMENTALMOST.LOST + LATEST_CUST_SEGMENTELITE + 
+                              LATEST_CUST_SEGMENTGROWABLE + LATEST_CUST_SEGMENTJUST.LOST + 
+                              LATEST_CUST_SEGMENTNAYSAYER + LATEST_CUST_SEGMENTPOTENTIAL + 
+                              LATEST_CUST_SEGMENTTOTALLY.LOST  + 
+                               TOTAL_NO_OF_COMPLAINTS + LAST_SERVICE_TIME_SPENT + 
+                              total_spend_last_1yr +  vehicle_tagOld.Active + 
+                              vehicle_tagOld.Inactive + SERIESJIVE + SERIESJUPITER + SERIESMAX.4R + 
+                              SERIESPHOENIX + SERIESSCOOTY.2S + SERIESSCOOTY.PEP.PLUS + 
+                              SERIESSPORT + SERIESSTAR + SERIESSTREAK + SERIESWEGO +  
+                              MONTH_OF_PURCHASE2 + MONTH_OF_PURCHASE3 + MONTH_OF_PURCHASE4 + 
+                              MONTH_OF_PURCHASE5 + MONTH_OF_PURCHASE6 + MONTH_OF_PURCHASE7 + 
+                              MONTH_OF_PURCHASE8 + MONTH_OF_PURCHASE9 + MONTH_OF_PURCHASE10 + 
+                              MONTH_OF_PURCHASE11 + MONTH_OF_PURCHASE12 + CEQ_ID) - CEQ_ID - 
+             SERIESJIVE - MONTH_OF_PURCHASE5 - MONTH_OF_PURCHASE7 - 
+            avg_km_usage_per_day - LAST_JOB_TYPE_ID19 - LAST_JOB_TYPE_ID20 - 
+            LAST_JOB_TYPE_ID25 - LATEST_CUST_SEGMENTELITE - SERIESMAX.4R - 
+            SERIESPHOENIX - SERIESSTREAK - MONTH_OF_PURCHASE8 - LATEST_CUST_SEGMENTPOTENTIAL - 
+            LAST_JOB_TYPE_ID5 - LAST_JOB_TYPE_ID16 - LAST_SERVICE_TIME_SPENT - 
+            SERIESSCOOTY.2S -  MONTH_OF_PURCHASE2 - MONTH_OF_PURCHASE3 - 
+            MONTH_OF_PURCHASE4 - MONTH_OF_PURCHASE6,  data=dfTraining, family=binomial(link=logit))
+
+summary(fit2)
+
+
+
+library(ROCR)
+#score train data set
+colnames(dfTraining)
+dfTraining$score<- predict(fit2,type='response',dfTraining)
+gc()
+predtrain<-prediction(dfTraining$score,dfTraining$IS_REPURCHASER)
+perftrain<- performance(predtrain,"tpr","fpr")
+
+#score test data set
+#colnames(dfValidation)
+dfValidation$score<-predict(fit2,type='response',dfValidation)
+gc()
+predtest<-prediction(dfValidation$score,dfValidation$IS_REPURCHASER)
+perftest<- performance(predtest,"tpr","fpr")
+
+#Plotting ROC Curve
+plot(perftrain,main="ROC Curve",col="green")
+par(new=TRUE)
+plot(perftest,col="red",lty=2)
+legend("bottomright", c("Train","Test"), cex=0.8,col=c("green","red"),lty=1:2)
+abline(0,1, lty = 8, col = "grey")
+
+# Calculating Area under the Curve
+performance (predtrain,"auc")
+# 0.8999557
+performance (predtest,"auc")
+# 0.8955127
+
+# Calculating KS
+max(attr(perftrain,'y.values')[[1]]-attr(perftrain,'x.values')[[1]])
+# 0.668176
+max(attr(perftest,'y.values')[[1]]-attr(perftest,'x.values')[[1]])
+# 0.6676956
+detach("package:ROCR", unload=TRUE)
+
+head(dfTraining$score)
+#Concordance
+CalculateConcordance <- function (myMod){
+  
+  fitted <- data.frame (cbind (myMod$y, myMod$fitted.values)) # actuals and fitted
+  
+  colnames(fitted) <- c('response','score') # rename columns
+  
+  ones <- fitted[fitted$response==1, ] # Subset ones
+  
+  zeros <- fitted[fitted$response==0, ] # Subsetzeros
+  
+  totalPairs <- nrow (ones) * nrow (zeros) # calculate total number of pairs to check
+  
+  conc <- sum (c (vapply (ones$score, function(x) {((x > zeros$score))}, FUN.VALUE=logical(nrow(zeros)))))
+  
+  disc <- totalPairs - conc
+  
+  # Calc concordance, discordance and ties
+  
+  concordance <- conc/totalPairs
+  
+  discordance <- disc/totalPairs
+  
+  tiesPercent <- (1-concordance-discordance)
+  
+  return(list("Concordance"=concordance, "Discordance"=discordance,
+              
+              "Tied"=tiesPercent, "Pairs"=totalPairs))
+  
+}
+
+
+CalculateConcordance(fit2)
+
+$Concordance
+[1] 0.8944411
+
+$Discordance
+[1] 0.1055589
+
+$Tied
+[1] -1.387779e-17
+
+$Pairs
+[1] 338494525
+
+######Selecting Otimal Cutoff
+opt.cut = function(perftrain, predtrain){
+  cut.ind = mapply(FUN=function(x, y, p){
+    d = (x - 0)^2 + (y-1)^2
+    ind = which(d == min(d))
+    c(sensitivity = y[[ind]], specificity = 1-x[[ind]], 
+      cutoff = p[[ind]])
+  }, perftrain@x.values, perftrain@y.values, predtrain@cutoffs)
+}
+print(opt.cut(perftrain, predtrain))
+
+
+
+
+gc()
+#Contingency Table with 0.5 cutoff
+dfTraining$pr<- as.vector(ifelse(predict(fit2, type="response",dfTraining) > 0.5, "1", "0"))
+
+# Generate the confusion matrix showing counts.
+table(dfTraining$IS_REPURCHASER,dfTraining$pr, dnn=c("Actual", "Predicted"))
+#Predicted
+#Actual     0     1
+#0 31008  1153
+#1  3859  6666
+mean(dfTraining$IS_REPURCHASER==dfTraining$pr)
+#0.8884646
+
+
+gc()
+dfValidation$pr<- as.vector(ifelse(predict(fit2, type="response",dfValidation) > 0.5, "1", "0"))
+table(dfValidation$IS_REPURCHASER,dfValidation$pr, dnn=c("Actual", "Predicted"))
+#Predicted
+#Actual     0     1
+#0 20792   700
+#1  2495  4470
+gc()
+
+#Testing Gains n Lift
+library(sqldf)
+myTmp_train<-sqldf("SELECT score, IS_REPURCHASER,pr FROM dfTraining ORDER BY score DESC")
+library(dplyr)
+myTmp_train$decile <- ntile(myTmp_train$score, 10)  
+
+sqldf("SELECT decile, count(*) AS Cnt, sum(is_repurchaser) AS actual_churners, 
+      MIN(score) AS MinScore, MAX(score) As MaxScore
+      FROM myTmp_train group by decile ORDER BY decile DESC")
+
+detach("package:dplyr", unload=TRUE)
+
+#Testing Gains n Lift
+library(sqldf)
+myTmp<-sqldf("SELECT score, is_repurchaser,pr FROM dfValidation ORDER BY score DESC")
+library(dplyr)
+myTmp$decile <- ntile(myTmp$score, 10)  
+
+myTmp_decile1<-sqldf("SELECT decile, count(*) AS Cnt, sum(is_repurchaser) AS actual_churners, 
+                     MIN(score) AS MinScore, MAX(score) As MaxScore
+                     FROM myTmp group by decile ORDER BY decile DESC")
+myTmp_decile1
+detach("package:dplyr", unload=TRUE)
